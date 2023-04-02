@@ -77,31 +77,12 @@ resource "aws_iam_role_policy_attachment" "tfc-access-attach" {
   policy_arn = aws_iam_policy.tfc-agent.arn
 }
 
-/* Fetch an oauth token from the client */
-data "tfe_oauth_client" "github" {
-  /* Don't fetch the client if we don't have the client_id */
-  count           = var.github_oauth_client_id != null ? 1 : 0
-  oauth_client_id = var.github_oauth_client_id
-}
-
 resource "tfe_workspace" "workspaces" {
   count        = length(var.tfc_workspaces)
   name         = var.tfc_workspaces[count.index]
   organization = tfe_organization.organization.name
 
   working_directory = var.tfc_workspaces[count.index]
-
-  /* This generates a webhook on the github repository so plans are triggered
-  automatically.   We dynamically set the setting because we will not have the
-  oauth client ID on first pass.
-  */
-  dynamic "vcs_repo" {
-    for_each = var.github_oauth_client_id != null ? [var.github_oauth_client_id] : []
-    content {
-      identifier     = format("%s/%s", var.github_organization, github_repository.repo.name)
-      oauth_token_id = data.tfe_oauth_client.github[0].oauth_token_id
-    }
-  }
 }
 
 /* These variables tell the agent to use dynamic credentials */
