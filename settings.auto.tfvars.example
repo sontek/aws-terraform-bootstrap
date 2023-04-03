@@ -4,6 +4,5 @@ tfc_workspaces = [
   "root"
 ]
 github_organization    = "github-org"
-github_oauth_client_id = "oc-..."
 github_repo_name       = "my-infra"
 aws_root_account_id    =  "888888888888"

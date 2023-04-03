@@ -47,12 +47,6 @@ variable "github_default_branch" {
   default     = "main"
 }
 
-variable "github_oauth_client_id" {
-  description = "The token for the TFC OAuth client shown under VCS providers"
-  type        = string
-  default     = null
-}
-
 variable "aws_root_account_id" {
   description = "The AWS root account we want to apply these changes to"
   type        = string
